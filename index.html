@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Little World ♡</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blush:#f8c8dc; --lavender:#d9c7f2; --cream:#fff8ef; --sky:#cfe6fb; --sage:#cfe3d0;
+  --ink:#4a3f5c; --ink-soft:#7a6d8f; --accent:#d46a9b; --accent2:#9b7fd1;
+  --bg1:#fff1f6; --bg2:#efe7fb; --bg3:#e6f3fb;
+  --card:rgba(255,255,255,.62); --card-border:rgba(255,255,255,.85);
+  --shadow:0 10px 34px rgba(160,120,190,.18);
+  --serif:'Cormorant Garamond',Georgia,serif; --sans:'Nunito',system-ui,sans-serif;
+}
+[data-theme="dark"]{
+  --ink:#f1e9ff; --ink-soft:#bdb0d6; --accent:#ff9ac4; --accent2:#b9a0ff;
+  --bg1:#1d1633; --bg2:#271d44; --bg3:#142339;
+  --card:rgba(52,40,84,.55); --card-border:rgba(255,255,255,.12);
+  --shadow:0 10px 34px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:var(--sans);color:var(--ink);line-height:1.6;min-height:100vh;
+  background:linear-gradient(160deg,var(--bg1),var(--bg2) 50%,var(--bg3));background-attachment:fixed;overflow-x:hidden;transition:background .6s,color .4s}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.15}
+h2{font-size:clamp(2rem,5vw,3rem);text-align:center;margin-bottom:.4rem}
+.sub{text-align:center;color:var(--ink-soft);margin-bottom:2rem}
+button{font:inherit;color:inherit;cursor:pointer;border:none;background:none}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,[contenteditable]:focus-visible{outline:3px solid var(--accent2);outline-offset:2px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.glass{background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--card-border);border-radius:24px;box-shadow:var(--shadow)}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.4rem;border-radius:999px;font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;box-shadow:0 8px 22px rgba(212,106,155,.35);transition:transform .25s,box-shadow .25s}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+.btn.ghost{background:var(--card);color:var(--ink);box-shadow:none;border:1px solid var(--card-border)}
+.btn.small{padding:.4rem .9rem;font-size:.85rem}
+input,textarea,select{font:inherit;color:var(--ink);background:rgba(255,255,255,.55);border:1px solid var(--card-border);border-radius:14px;padding:.6rem .9rem;width:100%}
+[data-theme="dark"] input,[data-theme="dark"] textarea,[data-theme="dark"] select{background:rgba(255,255,255,.08)}
+textarea{resize:vertical;min-height:110px}
+section{padding:5rem 1.25rem;max-width:1100px;margin:0 auto}
+.hidden{display:none!important}
+
+/* loader */
+#loader{position:fixed;inset:0;z-index:999;display:grid;place-items:center;background:linear-gradient(160deg,#ffe3ee,#e8dcfb);transition:opacity .8s,visibility .8s}
+#loader.done{opacity:0;visibility:hidden}
+.loader-in{text-align:center;color:#6b4c8a;font-family:var(--serif);font-size:1.5rem}
+.loader-in .heart{font-size:3rem;animation:beat 1s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+
+/* floating bg */
+#float-layer{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.floaty{position:absolute;bottom:-40px;opacity:.0;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.7}90%{opacity:.5}100%{transform:translateY(-115vh) rotate(360deg);opacity:0}}
+.twinkle{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;box-shadow:0 0 8px 2px rgba(255,255,255,.9);animation:tw 3s ease-in-out infinite}
+[data-theme="light"] .twinkle,:root:not([data-theme="dark"]) .twinkle{background:#fff;box-shadow:0 0 8px 2px rgba(217,199,242,.95)}
+@keyframes tw{0%,100%{opacity:.2;transform:scale(.7)}50%{opacity:1;transform:scale(1.5)}}
+main,nav,footer,header{position:relative;z-index:1}
+
+/* nav */
+nav{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:50;width:min(960px,calc(100% - 24px));padding:.55rem 1rem;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{font-family:var(--serif);font-weight:600;font-size:1.3rem;white-space:nowrap}
+.links{display:flex;gap:.2rem;align-items:center}
+.links a{color:var(--ink);text-decoration:none;font-weight:600;font-size:.9rem;padding:.4rem .75rem;border-radius:999px;transition:background .2s}
+.links a:hover,.links a.active{background:rgba(212,106,155,.2)}
+.nav-tools{display:flex;gap:.3rem}
+.icon-btn{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:1.1rem;background:var(--card);border:1px solid var(--card-border)}
+.icon-btn:hover{transform:rotate(12deg) scale(1.08)}
+#burger{display:none}
+@media(max-width:820px){
+  #burger{display:grid}
+  .links{position:absolute;top:calc(100% + 10px);left:0;right:0;flex-direction:column;padding:.8rem;border-radius:20px;background:var(--card);backdrop-filter:blur(16px);border:1px solid var(--card-border);display:none;box-shadow:var(--shadow)}
+  .links.open{display:flex}
+  .links a{width:100%;text-align:center;padding:.7rem}
+}
+
+/* hero */
+#home{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding-top:6rem;max-width:none}
+.clock{font-family:var(--serif);font-size:1.6rem;color:var(--accent2)}
+.greet{color:var(--ink-soft);margin-bottom:1.4rem}
+#home h1{font-size:clamp(2.6rem,9vw,5.6rem);background:linear-gradient(120deg,var(--accent),var(--accent2),#6fb4e8);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:1rem;animation:fadeUp 1.2s both}
+#home p.lead{max-width:560px;font-size:1.15rem;color:var(--ink-soft);margin-bottom:1.6rem;animation:fadeUp 1.2s .2s both}
+#home .btn{animation:fadeUp 1.2s .4s both,pulse 2.8s 2s infinite}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{box-shadow:0 8px 22px rgba(212,106,155,.35)}50%{box-shadow:0 8px 40px rgba(155,127,209,.7)}}
+.welcome{margin-top:1.4rem;padding:.8rem 1.4rem;max-width:520px}
+.cloud{position:absolute;font-size:4rem;opacity:.5;animation:drift 40s linear infinite}
+@keyframes drift{from{transform:translateX(-20vw)}to{transform:translateX(120vw)}}
+.reveal{opacity:0;transform:translateY(30px);transition:opacity .9s,transform .9s}
+.reveal.in{opacity:1;transform:none}
+
+/* about */
+.about-grid{display:grid;grid-template-columns:260px 1fr;gap:2rem;align-items:start}
+@media(max-width:760px){.about-grid{grid-template-columns:1fr;justify-items:center;text-align:center}}
+.avatar{width:230px;height:230px;border-radius:50%;display:grid;place-items:center;font-size:6rem;background:conic-gradient(from 0deg,var(--blush),var(--lavender),var(--sky),var(--sage),var(--blush));padding:8px;box-shadow:var(--shadow);position:relative;cursor:pointer;overflow:hidden}
+.avatar span,.avatar img{width:100%;height:100%;border-radius:50%;display:grid;place-items:center;background:var(--cream);object-fit:cover}
+[data-theme="dark"] .avatar span{background:#2c2250}
+.avatar-hint{font-size:.8rem;color:var(--ink-soft);margin-top:.5rem;text-align:center}
+.about-text{padding:1.6rem}
+.about-text h3{font-size:1.8rem;margin-bottom:.5rem}
+.chips{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0}
+.chip{padding:.35rem .9rem;border-radius:999px;background:rgba(155,127,209,.18);font-size:.9rem;font-weight:600;transition:transform .2s}
+.chip:hover{transform:translateY(-3px) rotate(-2deg)}
+.little-things{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1rem;margin-top:1.5rem}
+.little{padding:1.1rem;text-align:center;transition:transform .3s;cursor:pointer}
+.little:hover{transform:translateY(-6px) rotate(-1.5deg)}
+.little .em{font-size:2rem;display:block;margin-bottom:.3rem}
+[contenteditable]{cursor:text;border-radius:6px}
+[contenteditable]:hover{background:rgba(255,255,255,.35)}
+.edit-note{font-size:.8rem;color:var(--ink-soft);text-align:center;margin-top:1rem}
+
+/* memories */
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-bottom:1.6rem}
+.filter{padding:.45rem 1.1rem;border-radius:999px;background:var(--card);border:1px solid var(--card-border);font-weight:600;font-size:.9rem}
+.filter.on{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff}
+.masonry{columns:3 240px;column-gap:1.1rem}
+.mem{break-inside:avoid;margin-bottom:1.1rem;padding:.7rem .7rem 1rem;cursor:pointer;transition:transform .3s;text-align:left;width:100%;display:block}
+.mem:nth-child(odd){transform:rotate(-1deg)}.mem:nth-child(even){transform:rotate(1deg)}
+.mem:hover{transform:rotate(0) translateY(-6px) scale(1.02)}
+.mem .pic{border-radius:16px;display:grid;place-items:center;font-size:3.5rem;overflow:hidden}
+.mem .pic img{width:100%;display:block}
+.mem h3{font-size:1.25rem;margin:.6rem .3rem 0}
+.mem small{color:var(--ink-soft);margin:0 .3rem;display:block}
+.add-box{margin:2rem auto 0;max-width:560px;padding:1.2rem;display:grid;gap:.6rem}
+.row{display:flex;gap:.6rem;flex-wrap:wrap}.row>*{flex:1 1 140px}
+#lightbox{position:fixed;inset:0;z-index:200;background:rgba(30,20,50,.82);display:grid;place-items:center;padding:1rem;opacity:0;visibility:hidden;transition:.3s}
+#lightbox.open{opacity:1;visibility:visible}
+.lb-card{max-width:560px;width:100%;padding:1rem;text-align:center;background:var(--cream);color:#4a3f5c;border-radius:24px;position:relative}
+[data-theme="dark"] .lb-card{background:#2c2250;color:#f1e9ff}
+.lb-pic{border-radius:16px;min-height:300px;display:grid;place-items:center;font-size:7rem;overflow:hidden}
+.lb-pic img{width:100%;max-height:60vh;object-fit:contain}
+.lb-nav{position:absolute;top:50%;width:100%;left:0;display:flex;justify-content:space-between;padding:0 .4rem;pointer-events:none}
+.lb-nav button,.lb-close{pointer-events:auto;background:rgba(255,255,255,.85);color:#4a3f5c;width:42px;height:42px;border-radius:50%;font-size:1.3rem}
+.lb-close{position:absolute;top:-14px;right:-14px;z-index:2}
+
+/* playlist */
+.player{display:grid;grid-template-columns:240px 1fr;gap:1.6rem;padding:1.6rem}
+@media(max-width:700px){.player{grid-template-columns:1fr}}
+.vinyl{aspect-ratio:1;border-radius:24px;display:grid;place-items:center;font-size:5rem;box-shadow:var(--shadow);transition:background .6s}
+.vinyl.spin span{display:inline-block;animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.now h3{font-size:1.7rem}
+.controls{display:flex;align-items:center;gap:.8rem;margin:1rem 0}
+.play{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:1.4rem}
+input[type=range]{padding:0;height:8px;accent-color:var(--accent);background:transparent;border:none}
+.timeline{display:flex;align-items:center;gap:.6rem;font-size:.8rem;color:var(--ink-soft)}
+.tracks{list-style:none;margin-top:1rem;display:grid;gap:.4rem}
+.track{display:flex;align-items:center;gap:.8rem;padding:.55rem .8rem;border-radius:16px;width:100%;text-align:left;transition:background .2s}
+.track:hover,.track.on{background:rgba(212,106,155,.18)}
+.track .cov{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.3rem;flex:none}
+.track .meta{flex:1;min-width:0}.track .meta b{display:block}.track .meta small{color:var(--ink-soft)}
+.badge{font-size:.7rem;padding:.15rem .5rem;border-radius:999px;background:rgba(155,127,209,.2)}
+.notice{font-size:.85rem;color:var(--ink-soft);margin-top:.8rem;padding:.6rem .9rem;border-radius:14px;background:rgba(155,127,209,.12)}
+
+/* diary */
+.diary-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+@media(max-width:800px){.diary-grid{grid-template-columns:1fr}}
+.panel{padding:1.4rem}
+.moods{display:flex;flex-wrap:wrap;gap:.4rem;margin:.6rem 0 1rem}
+.mood{font-size:1.7rem;width:50px;height:50px;border-radius:16px;background:rgba(255,255,255,.4);border:2px solid transparent;transition:transform .2s}
+.mood:hover{transform:scale(1.15)}.mood[aria-pressed="true"]{border-color:var(--accent);background:rgba(212,106,155,.2)}
+.thought{padding:1.4rem;text-align:center;margin-bottom:1.2rem;background:linear-gradient(135deg,rgba(248,200,220,.55),rgba(217,199,242,.55))}
+.thought q{font-family:var(--serif);font-size:1.5rem;font-style:italic;display:block;margin:.4rem 0 .8rem}
+.entries{display:grid;gap:.8rem;margin-top:1rem;max-height:420px;overflow:auto}
+.entry{padding:1rem;border-radius:16px;background:rgba(255,255,255,.45);position:relative}
+[data-theme="dark"] .entry{background:rgba(255,255,255,.07)}
+.entry time{font-size:.8rem;color:var(--ink-soft)}
+.entry p{white-space:pre-wrap;word-break:break-word;margin-top:.3rem}
+.del{position:absolute;top:.5rem;right:.6rem;color:var(--ink-soft);font-size:1.1rem}
+.empty{text-align:center;color:var(--ink-soft);padding:1.2rem;font-style:italic}
+.checkin{padding:1.4rem;text-align:center;margin-top:1.4rem}
+#checkin-msg{margin-top:.8rem;min-height:1.5rem;font-family:var(--serif);font-size:1.3rem;color:var(--accent2)}
+
+/* favorites */
+.fav-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem}
+.fav{padding:1.3rem;transition:transform .3s}
+.fav:hover{transform:translateY(-6px) rotate(-.7deg)}
+.fav h3{font-size:1.4rem;margin-bottom:.6rem}
+.fav ul{list-style:none;display:grid;gap:.3rem;margin-bottom:.7rem}
+.fav li{display:flex;justify-content:space-between;gap:.5rem;padding:.3rem .6rem;border-radius:10px;background:rgba(255,255,255,.4)}
+[data-theme="dark"] .fav li{background:rgba(255,255,255,.07)}
+.fav li button{opacity:.5}.fav li button:hover{opacity:1}
+.fav form{display:flex;gap:.4rem}.fav form input{padding:.4rem .7rem}
+.fav form button{padding:0 .8rem;border-radius:12px;background:var(--accent2);color:#fff;font-weight:700}
+
+/* dreams */
+.dream-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:1.1rem}
+.dream{padding:1.2rem;position:relative;transition:transform .3s}
+.dream:hover{transform:translateY(-5px)}
+.dream .em{font-size:2.2rem}
+.dream h3{font-size:1.35rem;margin:.3rem 0}
+.dream.done{opacity:.7}.dream.done h3{text-decoration:line-through}
+.dream .acts{display:flex;gap:.4rem;margin-top:.7rem}
+.progress{height:10px;border-radius:99px;background:rgba(155,127,209,.2);margin:0 auto 1.6rem;max-width:420px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .6s}
+
+/* secret */
+.secret{text-align:center}
+.secret-box{padding:2.4rem 1.4rem;max-width:560px;margin:0 auto}
+.secret-msg{margin-top:1.4rem;font-family:var(--serif);font-size:1.6rem;font-style:italic;min-height:3rem}
+.burst{position:fixed;pointer-events:none;z-index:300;font-size:1.6rem;animation:burst 1.6s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--x),var(--y)) scale(1.4) rotate(var(--r));opacity:0}}
+
+footer{text-align:center;padding:3rem 1rem 4rem;font-family:var(--serif);font-size:1.3rem;color:var(--ink-soft)}
+#toast{position:fixed;bottom:22px;left:50%;transform:translate(-50%,40px);z-index:400;padding:.7rem 1.3rem;border-radius:999px;background:var(--ink);color:var(--bg1);opacity:0;transition:.4s;pointer-events:none;max-width:90vw;text-align:center;font-size:.9rem}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+#cursor{position:fixed;width:22px;height:22px;border-radius:50%;pointer-events:none;z-index:500;border:2px solid var(--accent);transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s;mix-blend-mode:normal;display:none}
+#cursor.big{width:44px;height:44px;background:rgba(212,106,155,.2)}
+@media(pointer:fine){#cursor{display:block}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<div id="loader" role="status" aria-label="Loading"><div class="loader-in"><div class="heart">🌸</div><p>Opening my little world…</p></div></div>
+<div id="float-layer" aria-hidden="true"></div>
+<div id="cursor" aria-hidden="true"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<nav class="glass" aria-label="Main navigation">
+  <a class="logo" href="#home" style="text-decoration:none;color:inherit">My Little World ♡</a>
+  <div class="links" id="links">
+    <a href="#home">Home</a><a href="#about">About Me</a><a href="#memories">Memories</a>
+    <a href="#playlist">Playlist</a><a href="#diary">Diary</a><a href="#favorites">Favorites</a><a href="#dreams">Dream Board</a>
+  </div>
+  <div class="nav-tools">
+    <button class="icon-btn" id="music-toggle" aria-label="Toggle background music (off by default)" aria-pressed="false">🎶</button>
+    <button class="icon-btn" id="theme-toggle" aria-label="Toggle day and night theme">🌙</button>
+    <button class="icon-btn" id="burger" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
+</nav>
+
+<header>
+<section id="home" aria-labelledby="hero-title">
+  <span class="cloud" style="top:14%;animation-duration:55s" aria-hidden="true">☁️</span>
+  <span class="cloud" style="top:62%;animation-duration:75s;animation-delay:-30s;font-size:3rem" aria-hidden="true">☁️</span>
+  <div class="clock" id="clock" aria-label="Current time"></div>
+  <p class="greet" id="greet"></p>
+  <h1 id="hero-title">Welcome to My Little World ♡</h1>
+  <p class="lead">A tiny universe made of dreams, memories, and little things that make me happy.</p>
+  <button class="btn" id="enter">Enter My World ✨</button>
+  <p class="welcome glass" id="welcome-msg">Hi, you! I'm so glad you're here. Take your shoes off, get comfy, and wander around. 🌷</p>
+</section>
+</header>
+
+<main id="world" class="hidden">
+
+<!-- ABOUT -->
+<section id="about" aria-labelledby="about-t">
+  <h2 id="about-t" class="reveal">About Me 💌</h2>
+  <p class="sub reveal">Tap any text to edit it. Your changes save in this browser.</p>
+  <div class="about-grid reveal">
+    <div>
+      <label class="avatar" title="Click to add a photo" for="avatar-file">
+        <span id="avatar-ph">🧸</span>
+      </label>
+      <input type="file" id="avatar-file" accept="image/*" class="sr">
+      <p class="avatar-hint">Click the circle to add a photo (this session only)</p>
+    </div>
+    <div class="about-text glass">
+      <h3 contenteditable="true" data-edit="about-name" spellcheck="false">Hi, I'm Your Name ♡</h3>
+      <p contenteditable="true" data-edit="about-bio" spellcheck="false">I'm a dreamer who loves quiet mornings, warm tea, soft music, and collecting tiny moments. This is a placeholder bio, so change it into your own story. I believe small joys are the biggest magic.</p>
+      <div class="chips" aria-label="Personality traits">
+        <span class="chip" contenteditable="true" data-edit="trait1">🌼 Gentle</span>
+        <span class="chip" contenteditable="true" data-edit="trait2">🎨 Creative</span>
+        <span class="chip" contenteditable="true" data-edit="trait3">📚 Curious</span>
+        <span class="chip" contenteditable="true" data-edit="trait4">🌙 Night owl</span>
+        <span class="chip" contenteditable="true" data-edit="trait5">☕ Cozy soul</span>
+      </div>
+      <p><b>Hobbies:</b> <span contenteditable="true" data-edit="hobbies">journaling, sketching, baking, long walks</span></p>
+      <p><b>Dreams:</b> <span contenteditable="true" data-edit="dreams-about">to travel the world and build something beautiful</span></p>
+    </div>
+  </div>
+  <h3 style="text-align:center;font-size:2rem;margin-top:2.5rem" class="reveal">Little Things About Me</h3>
+  <div class="little-things reveal">
+    <div class="glass little"><span class="em">🍓</span><b>Favorite snack</b><p contenteditable="true" data-edit="lt1">Strawberries with cream</p></div>
+    <div class="glass little"><span class="em">🌧️</span><b>Favorite weather</b><p contenteditable="true" data-edit="lt2">Soft rainy evenings</p></div>
+    <div class="glass little"><span class="em">🕯️</span><b>Cozy ritual</b><p contenteditable="true" data-edit="lt3">Candle + book + blanket</p></div>
+    <div class="glass little"><span class="em">🐱</span><b>Spirit animal</b><p contenteditable="true" data-edit="lt4">A sleepy kitten</p></div>
+  </div>
+</section>
+
+<!-- MEMORIES -->
+<section id="memories" aria-labelledby="mem-t">
+  <h2 id="mem-t" class="reveal">My Memories 📸</h2>
+  <p class="sub reveal">Sample cards for now. Add your own photos below.</p>
+  <div class="filters reveal" id="mem-filters" role="group" aria-label="Filter memories"></div>
+  <div class="masonry" id="mem-grid"></div>
+  <form class="add-box glass reveal" id="mem-form">
+    <b>Add a memory ✨</b>
+    <input id="m-title" placeholder="Title" required maxlength="40" aria-label="Memory title">
+    <div class="row">
+      <select id="m-cat" aria-label="Category"></select>
+      <input id="m-date" type="date" aria-label="Date">
+    </div>
+    <input id="m-cap" placeholder="Caption" maxlength="120" aria-label="Caption">
+    <input id="m-file" type="file" accept="image/*" aria-label="Photo (optional)">
+    <button class="btn" type="submit">Add to scrapbook</button>
+    <small class="edit-note">Photos added here live only until you refresh the page. Text memories are saved.</small>
+  </form>
+</section>
+
+<!-- PLAYLIST -->
+<section id="playlist" aria-labelledby="pl-t">
+  <h2 id="pl-t" class="reveal">My Little Playlist 🎵</h2>
+  <p class="sub reveal">A cozy player for the songs that feel like home.</p>
+  <div class="player glass reveal">
+    <div class="vinyl" id="vinyl"><span>🎧</span></div>
+    <div class="now">
+      <small style="color:var(--ink-soft)">NOW SELECTED</small>
+      <h3 id="np-title">Pick a song</h3>
+      <p id="np-artist" style="color:var(--ink-soft)">—</p>
+      <div class="controls">
+        <button class="icon-btn" id="prev" aria-label="Previous song">⏮</button>
+        <button class="play" id="play" aria-label="Play">▶</button>
+        <button class="icon-btn" id="next" aria-label="Next song">⏭</button>
+        <label class="sr" for="vol">Volume</label>
+        <span aria-hidden="true">🔈</span><input type="range" id="vol" min="0" max="1" step="0.05" value="0.7" style="max-width:110px">
+      </div>
+      <div class="timeline"><span id="t-cur">0:00</span><input type="range" id="seek" min="0" max="100" value="0" aria-label="Seek" style="flex:1"><span id="t-dur">0:00</span></div>
+      <p class="notice" id="audio-note">No audio is attached to these sample songs, so nothing will play yet. Attach your own audio file to any song with the 📎 button, and it will play right here.</p>
+    </div>
+    <ul class="tracks" id="tracks" style="grid-column:1/-1"></ul>
+  </div>
+  <input type="file" id="audio-file" accept="audio/*" class="sr">
+</section>
+
+<!-- DIARY -->
+<section id="diary" aria-labelledby="di-t">
+  <h2 id="di-t" class="reveal">My Thoughts &amp; Diary 🌙</h2>
+  <p class="sub reveal">Entries are saved in this browser only (localStorage). They stay private to this device, but they disappear if you clear site data.</p>
+  <div class="thought glass reveal">
+    <small>✨ THOUGHT OF THE DAY</small>
+    <q id="quote-text"></q>
+    <button class="btn small" id="new-quote">Another little reminder</button>
+  </div>
+  <div class="diary-grid reveal">
+    <form class="panel glass" id="diary-form">
+      <b>How are you feeling?</b>
+      <div class="moods" id="moods" role="group" aria-label="Mood"></div>
+      <label for="d-text"><b>Dear diary…</b></label>
+      <textarea id="d-text" placeholder="Write whatever your heart wants to say…" required></textarea>
+      <button class="btn" style="margin-top:.8rem" type="submit">Save entry 🖋️</button>
+    </form>
+    <div class="panel glass">
+      <b>Past entries</b>
+      <div class="entries" id="entries" aria-live="polite"></div>
+    </div>
+  </div>
+  <div class="checkin glass reveal">
+    <h3 style="font-size:1.7rem">How is your heart today? 💗</h3>
+    <div class="moods" id="checkin-moods" style="justify-content:center" role="group" aria-label="Heart check-in"></div>
+    <p id="checkin-msg"></p>
+  </div>
+</section>
+
+<!-- FAVORITES -->
+<section id="favorites" aria-labelledby="fav-t">
+  <h2 id="fav-t" class="reveal">My Favorites 🌸</h2>
+  <p class="sub reveal">Add or remove anything. It saves automatically.</p>
+  <div class="fav-grid" id="fav-grid"></div>
+</section>
+
+<!-- DREAMS -->
+<section id="dreams" aria-labelledby="dr-t">
+  <h2 id="dr-t" class="reveal">Things I Dream About ✨</h2>
+  <p class="sub reveal">Add dreams, tick them off when they come true.</p>
+  <div class="progress" aria-hidden="true"><i id="dream-bar"></i></div>
+  <p class="sub" id="dream-count"></p>
+  <div class="dream-grid" id="dream-grid"></div>
+  <form class="add-box glass" id="dream-form">
+    <b>Add a new dream 🌠</b>
+    <input id="dr-title" placeholder="e.g. See the northern lights" required maxlength="50" aria-label="Dream title">
+    <div class="row">
+      <select id="dr-type" aria-label="Type"><option value="✈️">Destination</option><option value="🎯">Goal</option><option value="🌱">Future plan</option><option value="💭">Wish</option></select>
+      <input id="dr-note" placeholder="A little note to yourself" maxlength="90" aria-label="Note">
+    </div>
+    <button class="btn" type="submit">Add dream card</button>
+  </form>
+</section>
+
+<!-- SECRET -->
+<section id="secret" class="secret" aria-labelledby="sec-t">
+  <h2 id="sec-t" class="reveal">A Little Secret ♡</h2>
+  <div class="secret-box glass reveal">
+    <p style="color:var(--ink-soft)">Psst… there's a tiny surprise hiding here.</p>
+    <button class="btn" id="secret-btn" style="margin-top:1rem">Open the secret 🧸</button>
+    <p class="secret-msg" id="secret-msg" aria-live="polite"></p>
+  </div>
+</section>
+</main>
+
+<footer>Made with love, from my little world to yours ♡</footer>
+
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Memory viewer">
+  <div class="lb-card">
+    <button class="lb-close" id="lb-close" aria-label="Close">✕</button>
+    <div class="lb-pic" id="lb-pic"></div>
+    <h3 id="lb-title" style="font-size:1.8rem;margin-top:.8rem"></h3>
+    <p id="lb-cap"></p><small id="lb-date" style="opacity:.7"></small>
+    <div class="lb-nav"><button id="lb-prev" aria-label="Previous memory">‹</button><button id="lb-next" aria-label="Next memory">›</button></div>
+  </div>
+</div>
+
+<audio id="audio" preload="none"></audio>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const store={
+  get(k,d){try{const v=localStorage.getItem('mlw_'+k);return v?JSON.parse(v):d}catch(e){return d}},
+  set(k,v){try{localStorage.setItem('mlw_'+k,JSON.stringify(v))}catch(e){}}
+};
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('show'),2800)}
+const esc=s=>s;
+
+/* loader */
+window.addEventListener('load',()=>setTimeout(()=>$('#loader').classList.add('done'),1100));
+setTimeout(()=>$('#loader').classList.add('done'),3000);
+
+/* theme */
+const root=document.documentElement;
+function setTheme(t){root.setAttribute('data-theme',t);$('#theme-toggle').textContent=t==='dark'?'☀️':'🌙';store.set('theme',t);buildFloat()}
+$('#theme-toggle').onclick=()=>setTheme(root.getAttribute('data-theme')==='dark'?'light':'dark');
+
+/* floating decorations */
+function buildFloat(){
+  const L=$('#float-layer');L.innerHTML='';
+  const dark=root.getAttribute('data-theme')==='dark';
+  const sym=dark?['✦','⭐','🌙','💜','✨']:['🌸','💗','✨','🌷','☁️','🦋'];
+  for(let i=0;i<16;i++){
+    const e=document.createElement('span');e.className='floaty';e.textContent=sym[i%sym.length];
+    e.style.left=Math.random()*100+'%';e.style.fontSize=(14+Math.random()*18)+'px';
+    e.style.animationDuration=(14+Math.random()*18)+'s';e.style.animationDelay=(-Math.random()*25)+'s';L.appendChild(e);
+  }
+  for(let i=0;i<40;i++){
+    const s=document.createElement('i');s.className='twinkle';
+    s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*3+'s';s.style.animationDuration=(2+Math.random()*3)+'s';L.appendChild(s);
+  }
+}
+
+/* clock + greeting */
+function tick(){
+  const d=new Date(),h=d.getHours();
+  $('#clock').textContent=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  const g=h<5?'Still up, night owl? 🌙':h<12?'Good morning, sunshine ☀️':h<17?'Good afternoon, lovely 🌼':h<21?'Good evening, dreamer 🌇':'Good night, sweet soul 🌙';
+  $('#greet').textContent=g;
+}
+tick();setInterval(tick,1000);
+
+/* enter world */
+$('#enter').onclick=()=>{
+  const w=$('#world');w.classList.remove('hidden');
+  initReveal();
+  setTimeout(()=>$('#about').scrollIntoView({behavior:'smooth'}),80);
+  burst(innerWidth/2,innerHeight/2,['✨','💗','🌸']);
+};
+function initReveal(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+  $$('.reveal').forEach(el=>io.observe(el));
+}
+
+/* nav */
+$('#burger').onclick=()=>{const o=$('#links').classList.toggle('open');$('#burger').setAttribute('aria-expanded',o);$('#burger').textContent=o?'✕':'☰'};
+$$('#links a').forEach(a=>a.addEventListener('click',e=>{
+  const id=a.getAttribute('href').slice(1);
+  if(id!=='home'&&$('#world').classList.contains('hidden')){$('#world').classList.remove('hidden');initReveal()}
+  $('#links').classList.remove('open');$('#burger').textContent='☰';$('#burger').setAttribute('aria-expanded','false');
+}));
+const secs=['home','about','memories','playlist','diary','favorites','dreams'];
+window.addEventListener('scroll',()=>{
+  let cur='home';secs.forEach(id=>{const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<200)cur=id});
+  $$('#links a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+/* editable text */
+$$('[data-edit]').forEach(el=>{
+  const k='edit_'+el.dataset.edit,v=store.get(k,null);if(v!==null)el.textContent=v;
+  el.addEventListener('blur',()=>store.set(k,el.textContent.trim()));
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'&&el.tagName!=='P'){e.preventDefault();el.blur()}});
+});
+$('#avatar-file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const url=URL.createObjectURL(f);$('#avatar-ph').outerHTML='<img src="'+url+'" alt="My profile photo">';
+};
+
+/* welcome message personalised */
+const wm=store.get('edit_welcome',null);
+
+/* memories */
+const cats=['Happy Moments','Friends','Travel','Favorite Days','Little Things'];
+const grads=['linear-gradient(135deg,#ffd6e7,#e5d4fa)','linear-gradient(135deg,#cfe6fb,#e8f5ea)','linear-gradient(135deg,#fff0c9,#ffd6e7)','linear-gradient(135deg,#e0d4fa,#cfe6fb)','linear-gradient(135deg,#d5ecd6,#fff4d6)'];
+let mems=store.get('mems',[
+ {cat:'Happy Moments',t:'Birthday picnic',d:'2025-04-12',c:'Cake, laughter, and way too many balloons.',e:'🎂',h:210},
+ {cat:'Friends',t:'Midnight chats',d:'2025-06-03',c:'The kind of talks that fix everything.',e:'👭',h:170},
+ {cat:'Travel',t:'Mountain mornings',d:'2025-08-21',c:'Mist, chai, and a view that went on forever.',e:'🏔️',h:250},
+ {cat:'Favorite Days',t:'Rainy Sunday',d:'2025-09-14',c:'Blanket, book, and the sound of rain.',e:'🌧️',h:190},
+ {cat:'Little Things',t:'Found a four-leaf clover',d:'2025-05-02',c:'Tiny luck, big smile.',e:'🍀',h:150},
+ {cat:'Travel',t:'Beach sunset',d:'2025-12-27',c:'The sky turned pink just for us.',e:'🌅',h:230},
+ {cat:'Friends',t:'Study date café',d:'2026-01-18',c:'More snacks than notes, honestly.',e:'☕',h:180},
+ {cat:'Happy Moments',t:'Fairy-light evening',d:'2026-03-08',c:'Everything glowed softly.',e:'✨',h:200}
+]);
+let filter='All',visible=[],lbIdx=0;
+const mf=$('#mem-filters');
+['All',...cats].forEach(c=>{const b=document.createElement('button');b.className='filter'+(c==='All'?' on':'');b.textContent=c;b.setAttribute('aria-pressed',c==='All');
+  b.onclick=()=>{filter=c;$$('.filter').forEach(x=>{x.classList.toggle('on',x===b);x.setAttribute('aria-pressed',x===b)});renderMems()};mf.appendChild(b)});
+cats.forEach(c=>{const o=document.createElement('option');o.textContent=c;$('#m-cat').appendChild(o)});
+function fmt(d){try{return new Date(d+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}catch(e){return d}}
+function renderMems(){
+  const g=$('#mem-grid');g.innerHTML='';
+  visible=mems.map((m,i)=>({...m,i})).filter(m=>filter==='All'||m.cat===filter);
+  if(!visible.length){g.innerHTML='<p class="empty">No memories here yet. Add one below 🌱</p>';return}
+  visible.forEach((m,vi)=>{
+    const b=document.createElement('button');b.className='mem glass';b.setAttribute('aria-label','Open memory: '+m.t);
+    const pic=document.createElement('div');pic.className='pic';
+    if(m.img){const im=document.createElement('img');im.src=m.img;im.alt=m.t;im.loading='lazy';pic.appendChild(im)}
+    else{pic.style.background=grads[(m.i)%grads.length];pic.style.height=(m.h||190)+'px';pic.textContent=m.e||'📷'}
+    const h=document.createElement('h3');h.textContent=m.t;
+    const s=document.createElement('small');s.textContent=m.cat+' · '+fmt(m.d);
+    b.append(pic,h,s);b.onclick=()=>openLb(vi);g.appendChild(b);
+  });
+}
+function openLb(i){lbIdx=i;const m=visible[i];const p=$('#lb-pic');p.innerHTML='';
+  if(m.img){const im=document.createElement('img');im.src=m.img;im.alt=m.t;p.style.background='none';p.appendChild(im)}
+  else{p.style.background=grads[m.i%grads.length];p.textContent=m.e||'📷'}
+  $('#lb-title').textContent=m.t;$('#lb-cap').textContent=m.c||'';$('#lb-date').textContent=m.cat+' · '+fmt(m.d);
+  $('#lightbox').classList.add('open');$('#lb-close').focus();}
+function closeLb(){$('#lightbox').classList.remove('open')}
+$('#lb-close').onclick=closeLb;
+$('#lb-prev').onclick=()=>openLb((lbIdx-1+visible.length)%visible.length);
+$('#lb-next').onclick=()=>openLb((lbIdx+1)%visible.length);
+$('#lightbox').onclick=e=>{if(e.target.id==='lightbox')closeLb()};
+document.addEventListener('keydown',e=>{
+  if(!$('#lightbox').classList.contains('open'))return;
+  if(e.key==='Escape')closeLb();if(e.key==='ArrowLeft')$('#lb-prev').click();if(e.key==='ArrowRight')$('#lb-next').click();
+});
+$('#mem-form').onsubmit=e=>{
+  e.preventDefault();
+  const f=$('#m-file').files[0];
+  const m={cat:$('#m-cat').value,t:$('#m-title').value.trim(),d:$('#m-date').value||new Date().toISOString().slice(0,10),c:$('#m-cap').value.trim(),e:'💖',h:180};
+  if(f)m.img=URL.createObjectURL(f);
+  mems.unshift(m);
+  store.set('mems',mems.map(x=>{const {img,...r}=x;return r}));
+  e.target.reset();renderMems();toast('Memory added 🌸');
+};
+renderMems();
+
+/* playlist */
+const songs=[
+ {t:'Golden Hour Daydream',a:'Sample Artist',e:'🌅',g:'linear-gradient(135deg,#ffd6e7,#ffe9b8)',src:''},
+ {t:'Lavender Rain',a:'Sample Artist',e:'💜',g:'linear-gradient(135deg,#d9c7f2,#cfe6fb)',src:''},
+ {t:'Little Garden',a:'Sample Artist',e:'🌿',g:'linear-gradient(135deg,#d5ecd6,#fff4d6)',src:''},
+ {t:'Moonlit Letters',a:'Sample Artist',e:'🌙',g:'linear-gradient(135deg,#c9c0f0,#f8c8dc)',src:''},
+ {t:'Cozy Café Hours',a:'Sample Artist',e:'☕',g:'linear-gradient(135deg,#ffe3cf,#f8c8dc)',src:''}
+];
+const au=$('#audio');let cur=0,attachFor=0;
+const fmtT=s=>isFinite(s)?Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0'):'0:00';
+function renderTracks(){
+  const ul=$('#tracks');ul.innerHTML='';
+  songs.forEach((s,i)=>{
+    const li=document.createElement('li');
+    const b=document.createElement('button');b.className='track'+(i===cur?' on':'');
+    b.innerHTML='<span class="cov"></span><span class="meta"><b></b><small></small></span><span class="badge"></span>';
+    b.querySelector('.cov').style.background=s.g;b.querySelector('.cov').textContent=s.e;
+    b.querySelector('b').textContent=s.t;b.querySelector('small').textContent=s.a;
+    b.querySelector('.badge').textContent=s.src?'ready':'no audio';
+    b.onclick=()=>select(i);
+    const at=document.createElement('button');at.className='icon-btn';at.textContent='📎';at.setAttribute('aria-label','Attach audio file to '+s.t);
+    at.style.cssText='position:absolute;right:-6px;top:50%;transform:translateY(-50%);width:32px;height:32px;font-size:.9rem;display:none';
+    li.style.position='relative';
+    const wrap=document.createElement('div');wrap.style.cssText='display:flex;gap:.4rem;align-items:center';
+    at.style.cssText='width:36px;height:36px;font-size:.9rem;flex:none';
+    at.onclick=()=>{attachFor=i;$('#audio-file').click()};
+    wrap.append(b,at);b.style.flex='1';li.appendChild(wrap);ul.appendChild(li);
+  });
+}
+function select(i,autoplay){
+  cur=i;const s=songs[i];
+  $('#np-title').textContent=s.t;$('#np-artist').textContent=s.a;
+  $('#vinyl').style.background=s.g;$('#vinyl span').textContent=s.e;
+  au.pause();setPlayUI(false);
+  if(s.src){au.src=s.src;au.load();$('#audio-note').textContent='Ready to play: '+s.t+' 🎶';if(autoplay)au.play().catch(()=>{})}
+  else{au.removeAttribute('src');au.load();$('#audio-note').textContent='This song has no audio attached yet, so nothing will play. Use the 📎 button next to it to attach your own audio file.'}
+  $('#seek').value=0;$('#t-cur').textContent='0:00';$('#t-dur').textContent='0:00';renderTracks();
+}
+function setPlayUI(p){$('#play').textContent=p?'⏸':'▶';$('#play').setAttribute('aria-label',p?'Pause':'Play');$('#vinyl').classList.toggle('spin',p)}
+$('#play').onclick=()=>{
+  if(!songs[cur].src){toast('No audio attached to this song yet. Use 📎 to add one.');return}
+  if(au.paused)au.play().catch(()=>toast('Could not play this file.'));else au.pause();
+};
+au.onplay=()=>setPlayUI(true);au.onpause=()=>setPlayUI(false);
+au.onended=()=>{const n=songs.findIndex((s,i)=>i>cur&&s.src);if(n>-1)select(n,true);else setPlayUI(false)};
+au.ontimeupdate=()=>{$('#t-cur').textContent=fmtT(au.currentTime);if(au.duration)$('#seek').value=au.currentTime/au.duration*100};
+au.onloadedmetadata=()=>$('#t-dur').textContent=fmtT(au.duration);
+$('#seek').oninput=e=>{if(au.duration)au.currentTime=e.target.value/100*au.duration};
+$('#vol').oninput=e=>au.volume=e.target.value;au.volume=.7;
+$('#prev').onclick=()=>select((cur-1+songs.length)%songs.length);
+$('#next').onclick=()=>select((cur+1)%songs.length);
+$('#audio-file').onchange=e=>{const f=e.target.files[0];if(!f)return;songs[attachFor].src=URL.createObjectURL(f);songs[attachFor].t=songs[attachFor].t;select(attachFor);toast('Audio attached! Press play ▶');e.target.value=''};
+$('#music-toggle').onclick=()=>{
+  const btn=$('#music-toggle');
+  if(au.src&&!au.paused){au.pause();btn.setAttribute('aria-pressed','false');return}
+  const idx=songs[cur].src?cur:songs.findIndex(s=>s.src);
+  if(idx<0){toast('Background music is off. Attach an audio file to a song in the Playlist first 🎶');return}
+  if(idx!==cur)select(idx);au.loop=false;au.play().then(()=>btn.setAttribute('aria-pressed','true')).catch(()=>{});
+};
+select(0);
+
+/* quotes */
+const quotes=['Small steps still move you forward.','You are allowed to bloom at your own pace.','Be gentle with yourself. You are doing your best.','Tiny joys are still joys.','Even the moon has phases, and it is still beautiful.','Your softness is a strength.','Today is a good day to begin again.','Collect moments, not things.','You are someone’s favorite kind of person.','Dream big, start tiny.'];
+function newQuote(){$('#quote-text').textContent='“'+quotes[Math.floor(Math.random()*quotes.length)]+'”'}
+$('#new-quote').onclick=newQuote;
+{const d=new Date();$('#quote-text').textContent='“'+quotes[(d.getFullYear()*372+d.getMonth()*31+d.getDate())%quotes.length]+'”'}
+
+/* diary */
+const moodList=[['😊','happy'],['🥰','loved'],['😌','calm'],['😴','sleepy'],['🥺','tender'],['😢','sad'],['😤','frustrated'],['🤩','excited']];
+let mood='😊';
+function buildMoods(box,onPick,sel){
+  moodList.forEach(([e,n])=>{
+    const b=document.createElement('button');b.type='button';b.className='mood';b.textContent=e;b.title=n;b.setAttribute('aria-label',n);b.setAttribute('aria-pressed',e===sel);
+    b.onclick=()=>{box.querySelectorAll('.mood').forEach(x=>x.setAttribute('aria-pressed',x===b));onPick(e,n)};box.appendChild(b);
+  });
+}
+buildMoods($('#moods'),e=>mood=e,'😊');
+let entries=store.get('diary',[]);
+function renderEntries(){
+  const box=$('#entries');box.innerHTML='';
+  if(!entries.length){box.innerHTML='<p class="empty">No entries yet. Your first page is waiting 🌙</p>';return}
+  entries.forEach((en,i)=>{
+    const d=document.createElement('div');d.className='entry';
+    const t=document.createElement('time');t.textContent=en.m+'  '+new Date(en.ts).toLocaleString([], {dateStyle:'medium',timeStyle:'short'});
+    const p=document.createElement('p');p.textContent=en.x;
+    const x=document.createElement('button');x.className='del';x.textContent='✕';x.setAttribute('aria-label','Delete entry');
+    x.onclick=()=>{if(confirm('Delete this entry?')){entries.splice(i,1);store.set('diary',entries);renderEntries()}};
+    d.append(t,p,x);box.appendChild(d);
+  });
+}
+$('#diary-form').onsubmit=e=>{e.preventDefault();const x=$('#d-text').value.trim();if(!x)return;
+  entries.unshift({m:mood,x,ts:Date.now()});store.set('diary',entries);$('#d-text').value='';renderEntries();toast('Saved in this browser 🌙')};
+renderEntries();
+
+/* heart check-in */
+const replies={happy:'Your smile is contagious. Keep shining ☀️',loved:'You deserve every bit of that love 💗',calm:'Hold on to this peace, you earned it 🍃',sleepy:'Rest is productive too. Go nap, sweet soul 😴',tender:'Be extra kind to yourself today 🫶',sad:'It’s okay to feel this. Sending you a soft hug 🤍',frustrated:'Breathe in, breathe out. This will pass 🌬️',excited:'Yay! Go chase that sparkle ✨'};
+buildMoods($('#checkin-moods'),(e,n)=>{$('#checkin-msg').textContent=e+'  '+replies[n];store.set('checkin',{e,n,ts:Date.now()});burst(innerWidth/2,innerHeight/2,[e])},null);
+
+/* favorites */
+const favDefaults={'🎵 Songs':['Golden Hour Daydream','Lavender Rain'],'🎬 Movies & Shows':['Spirited Away','Little Women'],'📚 Books':['The Alchemist','Little Fires of Hope'],'📍 Places':['A cozy window seat','The hills at sunrise'],'🍰 Foods':['Strawberry cheesecake','Hot chocolate'],'💬 Quotes':['“Bloom where you are planted.”'],'🎨 Colors & Flowers':['Blush pink','Lavender','Peonies']};
+let favs=store.get('favs',favDefaults);
+function renderFavs(){
+  const g=$('#fav-grid');g.innerHTML='';
+  Object.keys(favs).forEach(k=>{
+    const c=document.createElement('div');c.className='fav glass';
+    const h=document.createElement('h3');h.textContent=k;
+    const ul=document.createElement('ul');
+    favs[k].forEach((it,i)=>{const li=document.createElement('li');const s=document.createElement('span');s.textContent=it;
+      const b=document.createElement('button');b.textContent='✕';b.setAttribute('aria-label','Remove '+it);b.onclick=()=>{favs[k].splice(i,1);store.set('favs',favs);renderFavs()};li.append(s,b);ul.appendChild(li)});
+    if(!favs[k].length){const li=document.createElement('li');li.style.opacity='.6';li.textContent='Nothing yet…';ul.appendChild(li)}
+    const f=document.createElement('form');const inp=document.createElement('input');inp.placeholder='Add one…';inp.maxLength=60;inp.setAttribute('aria-label','Add to '+k);
+    const ad=document.createElement('button');ad.textContent='+';ad.setAttribute('aria-label','Add');
+    f.append(inp,ad);f.onsubmit=e=>{e.preventDefault();const v=inp.value.trim();if(!v)return;favs[k].push(v);store.set('favs',favs);renderFavs()};
+    c.append(h,ul,f);g.appendChild(c);
+  });
+}
+renderFavs();
+
+/* dreams */
+let dreams=store.get('dreams',[
+ {e:'✈️',t:'Visit Japan in cherry blossom season',n:'Kyoto temples + sakura tea',done:false},
+ {e:'🎯',t:'Finish my first big project',n:'One small step every day',done:false},
+ {e:'🌱',t:'Build a tiny home garden',n:'Herbs, tulips, and a reading nook',done:false},
+ {e:'💭',t:'Write a book of my little thoughts',n:'Started already!',done:true}
+]);
+function renderDreams(){
+  const g=$('#dream-grid');g.innerHTML='';
+  if(!dreams.length)g.innerHTML='<p class="empty" style="grid-column:1/-1">No dreams yet. What do you wish for? 🌠</p>';
+  dreams.forEach((d,i)=>{
+    const c=document.createElement('div');c.className='dream glass'+(d.done?' done':'');
+    c.innerHTML='<div class="em"></div><h3></h3><p></p><div class="acts"></div>';
+    c.querySelector('.em').textContent=d.e;c.querySelector('h3').textContent=d.t;c.querySelector('p').textContent=d.n||'';
+    const a=c.querySelector('.acts');
+    const ok=document.createElement('button');ok.className='btn small'+(d.done?' ghost':'');ok.textContent=d.done?'↺ Undo':'✓ Done!';
+    ok.onclick=()=>{d.done=!d.done;store.set('dreams',dreams);renderDreams();if(d.done)burst(innerWidth/2,innerHeight/2,['🎉','✨','💖'])};
+    const rm=document.createElement('button');rm.className='btn small ghost';rm.textContent='Remove';rm.setAttribute('aria-label','Remove '+d.t);
+    rm.onclick=()=>{dreams.splice(i,1);store.set('dreams',dreams);renderDreams()};
+    a.append(ok,rm);g.appendChild(c);
+  });
+  const n=dreams.filter(d=>d.done).length;
+  $('#dream-bar').style.width=(dreams.length?n/dreams.length*100:0)+'%';
+  $('#dream-count').textContent=n+' of '+dreams.length+' dreams come true 🌈';
+}
+$('#dream-form').onsubmit=e=>{e.preventDefault();const t=$('#dr-title').value.trim();if(!t)return;
+  dreams.unshift({e:$('#dr-type').value,t,n:$('#dr-note').value.trim(),done:false});store.set('dreams',dreams);e.target.reset();renderDreams();toast('New dream added ✨')};
+renderDreams();
+
+/* secret */
+const secrets=['You are doing better than you think. 💗','Somebody out there is very proud of you.','Your little world is already magical.','Psst… you’re the best part of this place. ✨','Drink water, stretch, smile. Okay? 🌷'];
+let si=0;
+$('#secret-btn').onclick=e=>{
+  $('#secret-msg').textContent=secrets[si++%secrets.length];
+  const r=e.currentTarget.getBoundingClientRect();burst(r.left+r.width/2,r.top,['💖','✨','🧸','🌸','⭐']);
+};
+function burst(x,y,set){
+  for(let i=0;i<14;i++){
+    const s=document.createElement('span');s.className='burst';s.textContent=set[i%set.length];
+    s.style.left=x+'px';s.style.top=y+'px';
+    s.style.setProperty('--x',(Math.random()*320-160)+'px');s.style.setProperty('--y',(Math.random()*-260-30)+'px');s.style.setProperty('--r',(Math.random()*360-180)+'deg');
+    document.body.appendChild(s);setTimeout(()=>s.remove(),1700);
+  }
+}
+
+/* cursor */
+if(matchMedia('(pointer:fine)').matches){
+  const c=$('#cursor');
+  document.addEventListener('mousemove',e=>{c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});
+  document.addEventListener('mouseover',e=>c.classList.toggle('big',!!e.target.closest('button,a,input,textarea,select,label')));
+}
+
+setTheme(store.get('theme',matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+})();
+</script>
+</body>
+</html>
